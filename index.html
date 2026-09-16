@@ -178,6 +178,12 @@
   .c-top{ display:flex; align-items:center; flex-wrap:wrap; gap:8px 10px;}
   .c-title{ font-weight:600; font-size:14.5px; cursor:pointer; }
   .c-code{ font-weight:500; font-size:12px; color:#8a8175; }
+  .c-info-btn{
+    flex-shrink:0; width:22px; height:22px; border-radius:50%; border:1px solid var(--line);
+    background:#fff; color:#8a8175; font-size:13px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .15s, border-color .15s, color .15s;
+  }
+  .c-info-btn:hover{ background:#eee7d5; border-color:var(--gold); color:var(--ink); }
   .c-units{ font-size:11.5px; color:#8a8175; white-space:nowrap;}
   .c-status{
     font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; white-space:nowrap;
@@ -224,6 +230,44 @@
     .g-progress{min-width:90px;}
     .c-units{font-size:10.5px;}
   }
+
+  .rel-overlay{
+    position:fixed; inset:0; background:rgba(19,42,46,.45); z-index:50;
+    display:flex; align-items:flex-end; justify-content:center;
+    animation:relFadeIn .15s ease;
+  }
+  @keyframes relFadeIn{ from{opacity:0;} to{opacity:1;} }
+  .rel-sheet{
+    background:var(--paper-2); border-radius:16px 16px 0 0; width:100%; max-width:520px;
+    max-height:80vh; overflow-y:auto; padding:18px 18px 22px; box-shadow:0 -8px 30px rgba(19,42,46,.25);
+    animation:relSlideUp .18s ease;
+  }
+  @media (min-width:560px){
+    .rel-overlay{ align-items:center; }
+    .rel-sheet{ border-radius:var(--radius); }
+  }
+  @keyframes relSlideUp{ from{transform:translateY(16px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+  .rel-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:4px;}
+  .rel-title{ font-weight:700; font-size:15.5px;}
+  .rel-code{ font-weight:500; font-size:12px; color:#8a8175; margin-top:2px;}
+  .rel-close{
+    flex-shrink:0; width:28px; height:28px; border-radius:50%; border:1px solid var(--line);
+    background:#fff; color:var(--ink); font-size:15px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .rel-close:hover{ background:#eee7d5;}
+  .rel-section{ margin-top:14px;}
+  .rel-section h4{ font-size:12.5px; color:#8a8175; margin:0 0 6px; font-weight:700;}
+  .rel-chips{ display:flex; flex-direction:column; gap:6px;}
+  .rel-chip{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#fbf9f3; font-size:13px;
+  }
+  .rel-chip .rc-title{ font-weight:600;}
+  .rel-chip .rc-tag{ font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:999px; white-space:nowrap;}
+  .rel-chip .rc-tag.done{ background:var(--ok-bg); color:var(--ok);}
+  .rel-chip .rc-tag.todo{ background:var(--lock-bg); color:#5c564a;}
+  .rel-empty{ font-size:12.5px; color:#8a8175;}
 </style>
 </head>
 <body>
@@ -510,7 +554,7 @@ function computeGPA(){
       if(!state[key].has(c.id)) return;
       const g = state.grades[c.id];
       if(typeof g !== 'number' || isNaN(g)) return;
-      const u = creditUnitsOf(c);
+      const u = unitsOf(c);
       weighted += g*u;
       gradedUnits += u;
       gradedCount++;
@@ -625,6 +669,67 @@ function unitsLabel(course){
 
 function titleOf(list, id){ const c = byId(list,id); return c?c.title:id; }
 
+// Courses (from the same list) that list `course.id` in their own `pre` array -
+// i.e. courses for which this course is a direct prerequisite. Only direct
+// dependents, not the whole downstream chain.
+function coursesRequiring(course, courses){
+  return courses.filter(c => (c.pre||[]).includes(course.id));
+}
+
+function relChip(c, passedSet){
+  const isDone = passedSet.has(c.id);
+  return `<div class="rel-chip"><span class="rc-title">${escapeHtml(c.title)}</span>` +
+    `<span class="rc-tag ${isDone?'done':'todo'}">${isDone?'گذرانده':'گذرونده نشده'}</span></div>`;
+}
+
+function openRelationshipSheet(course, courses, passedSet){
+  const pre = (course.pre||[]).map(id=>byId(courses,id)).filter(Boolean);
+  const co = (course.co||[]).map(id=>byId(courses,id)).filter(Boolean);
+  const dependents = coursesRequiring(course, courses);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'rel-overlay';
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.remove(); });
+
+  const sheet = document.createElement('div');
+  sheet.className = 'rel-sheet';
+
+  const sectionsHtml = [];
+
+  sectionsHtml.push(`<div class="rel-section"><h4>پیش‌نیاز این درس</h4>` +
+    (pre.length || course.preText
+      ? `<div class="rel-chips">${pre.map(c=>relChip(c, passedSet)).join('')}${course.preText && !pre.length ? `<div class="rel-empty">${escapeHtml(course.preText)}</div>` : ''}</div>`
+      : `<div class="rel-empty">پیش‌نیازی نداره</div>`) +
+    `</div>`);
+
+  sectionsHtml.push(`<div class="rel-section"><h4>هم‌نیاز این درس</h4>` +
+    (co.length || course.coText
+      ? `<div class="rel-chips">${co.map(c=>relChip(c, passedSet)).join('')}${course.coText && !co.length ? `<div class="rel-empty">${escapeHtml(course.coText)}</div>` : ''}</div>`
+      : `<div class="rel-empty">هم‌نیازی نداره</div>`) +
+    `</div>`);
+
+  sectionsHtml.push(`<div class="rel-section"><h4>درس‌هایی که این درس پیش‌نیازشونه</h4>` +
+    (dependents.length
+      ? `<div class="rel-chips">${dependents.map(c=>relChip(c, passedSet)).join('')}</div>`
+      : `<div class="rel-empty">پیش‌نیاز هیچ درسی نیست</div>`) +
+    `</div>`);
+
+  sheet.innerHTML = `
+    <div class="rel-head">
+      <div>
+        <div class="rel-title">${escapeHtml(course.title)}</div>
+        ${course.code ? `<div class="rel-code num">${escapeHtml(course.code)}</div>` : ''}
+      </div>
+      <button type="button" class="rel-close" aria-label="بستن">✕</button>
+    </div>
+    ${sectionsHtml.join('')}
+  `;
+  sheet.querySelector('.rel-close').addEventListener('click', ()=>overlay.remove());
+
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+}
+
 function renderCourseRow(course, courses, passedSet, setKey){
   const status = courseStatus(course, passedSet);
   const passed = status==='passed';
@@ -660,9 +765,20 @@ function renderCourseRow(course, courses, passedSet, setKey){
   badge.className = 'c-status ' + status;
   badge.textContent = status==='passed' ? 'گذرانده' : status==='avail' ? 'قابل اخذ' : 'نیازمند پیش‌نیاز';
 
+  const infoBtn = document.createElement('button');
+  infoBtn.type = 'button';
+  infoBtn.className = 'c-info-btn';
+  infoBtn.setAttribute('aria-label', 'روابط پیش‌نیازی درس');
+  infoBtn.textContent = '⋮';
+  infoBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    openRelationshipSheet(course, courses, passedSet);
+  });
+
   top.appendChild(title);
   top.appendChild(units);
   top.appendChild(badge);
+  top.appendChild(infoBtn);
   body.appendChild(top);
 
   if(!passed){
