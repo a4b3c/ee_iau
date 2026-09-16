@@ -5,301 +5,759 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>درختواره دروس - واحد یار</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#132a2e">
+<meta name="theme-color" content="#0d9488">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="واحد یار">
 <link rel="apple-touch-icon" href="icon_192.png">
 <link rel="icon" href="icon_192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#132a2e;
-    --ink-2:#1c3a3f;
-    --paper:#f3efe4;
-    --paper-2:#ffffff;
-    --line: #d8d0bd;
-    --seal:#b5432b;
-    --gold:#c8973f;
-    --ok:#4f7a4a;
-    --ok-bg:#e7efe1;
-    --wait:#2f6c7d;
-    --wait-bg:#e2eff2;
-    --lock:#8a8175;
-    --lock-bg:#eeeae1;
-    --warn:#a3541f;
-    --warn-bg:#f6e9d8;
-    --radius: 10px;
-    --shadow: 0 1px 0 rgba(19,42,46,.06), 0 8px 24px -16px rgba(19,42,46,.35);
-  }
-  *{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%;}
-  body{
-    margin:0;
-    background:
-      radial-gradient(1200px 500px at 85% -10%, rgba(200,151,63,.10), transparent 60%),
-      var(--paper);
-    color:var(--ink);
-    font-family:'Vazirmatn', Tahoma, sans-serif;
-    line-height:1.6;
-    padding-bottom:60px;
-  }
-  .num{ font-family:'JetBrains Mono','Vazirmatn',monospace; font-variant-numeric: tabular-nums; direction:ltr; unicode-bidi: isolate; }
-
-  header.top{
-    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
-    color:#f3efe4;
-    padding:28px 18px 84px;
-    position:relative;
-    overflow:hidden;
-  }
-  header.top::after{
-    content:"";
-    position:absolute; inset:auto -10% -60% -10%;
-    height:220px;
-    background: radial-gradient(50% 100% at 50% 0%, rgba(200,151,63,.25), transparent 70%);
-  }
-  .top-inner{ max-width:900px; margin:0 auto; position:relative; z-index:1;}
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:12.5px; letter-spacing:.02em;
-    background:rgba(200,151,63,.14); border:1px solid rgba(200,151,63,.35);
-    padding:4px 10px; border-radius:999px; margin-bottom:14px;
-  }
-    .eyebrow a{color:#1a0dab;text-decoration:none;}
-  h1{ font-size:26px; font-weight:800; margin:0 0 8px; letter-spacing:-.01em;}
-  header.top p{ margin:0; color:#cdd8d2; font-size:14.5px; max-width:60ch;}
-
-  .wrap{ max-width:900px; margin:-58px auto 0; padding:0 14px; position:relative; z-index:2;}
-
-  nav.tabs{
-    display:flex; gap:6px; background:var(--paper-2); border:1px solid var(--line);
-    border-radius:12px; padding:6px; box-shadow:var(--shadow); margin-bottom:18px;
-  }
-  nav.tabs button{
-    flex:1; border:0; background:transparent; padding:12px 10px; border-radius:8px;
-    font-family:inherit; font-size:14.5px; font-weight:600; color:var(--ink);
-    cursor:pointer; transition:background .15s, color .15s;
-  }
-  nav.tabs button.active{ background:var(--ink); color:#f3efe4; }
-  nav.tabs button:not(.active):hover{ background:#eee7d5;}
-
-  .panel{ display:none; }
-  .panel.active{ display:block; }
-
-  .summary-card{
-    background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius);
-    padding:16px 18px; margin-bottom:14px; box-shadow:var(--shadow);
-  }
-  .summary-row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:10px;}
-  .summary-row:last-child{margin-bottom:0;}
-  .summary-title{ font-weight:700; font-size:15px;}
-  .summary-num{ font-size:13.5px; color:#5a5346;}
-  .bar-track{ height:8px; border-radius:999px; background:#eae4d3; overflow:hidden; margin-top:6px;}
-  .bar-fill{ height:100%; border-radius:999px; background:linear-gradient(90deg, var(--gold), var(--seal)); transition:width .4s ease;}
-
-  .suggest-box{
-    background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius);
-    padding:16px 18px; margin-bottom:18px; box-shadow:var(--shadow);
-  }
-  .suggest-box h2{ font-size:15.5px; margin:0 0 4px; display:flex; align-items:center; gap:8px;}
-  .suggest-box h2 .stamp-dot{width:9px;height:9px;border-radius:50%;background:var(--seal);display:inline-block;}
-  .suggest-sub{ font-size:12.5px; color:#726b5c; margin:0 0 12px;}
-  .suggest-list{ display:flex; flex-direction:column; gap:8px;}
-  .suggest-item{
-    display:flex; align-items:flex-start; gap:10px; padding:10px 12px;
-    border:1px solid var(--line); border-radius:8px; background:#fbf9f3;
-  }
-  .suggest-item .tag{
-    flex-shrink:0; font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px;
-    white-space:nowrap;
-  }
-  .tag.mandatory{ background:var(--warn-bg); color:var(--warn);}
-  .tag.quota{ background:var(--wait-bg); color:var(--wait);}
-  .tag.optional{ background:var(--lock-bg); color:#5c564a;}
-  .suggest-item .body{flex:1; min-width:0;}
-  .suggest-item .body .t{ font-weight:700; font-size:14px;}
-  .suggest-item .body .s-units{ font-weight:500; font-size:12px; color:#8a8175;}
-  .suggest-item .body .r{ font-size:12.5px; color:#726b5c; margin-top:2px;}
-  .suggest-item .body .r.r-warn{ color:var(--seal); font-weight:600;}
-  .dismiss-btn{
-    flex-shrink:0; width:26px; height:26px; border-radius:50%; border:1px solid var(--line);
-    background:#fff; color:var(--seal); font-size:13px; line-height:1; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; transition:background .15s, border-color .15s;
-    margin-top:1px;
-  }
-  .dismiss-btn:hover{ background:#faece7; border-color:#e3c3ba;}
-  .suggest-empty{ font-size:13.5px; color:#726b5c; padding:6px 2px;}
-
-  details.group{
-    background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius);
-    margin-bottom:10px; box-shadow:var(--shadow); overflow:hidden;
-  }
-  details.group > summary{
-    list-style:none; cursor:pointer; padding:14px 16px; display:flex; align-items:center;
-    justify-content:space-between; gap:10px;
-  }
-  details.group > summary::-webkit-details-marker{display:none;}
-  .g-left{display:flex; flex-direction:column; gap:6px; flex:1; min-width:0;}
-  .g-title{font-weight:700; font-size:14.5px; display:flex; align-items:center; gap:8px;}
-  .g-chev{ transition:transform .18s; color:#a89f8c; flex-shrink:0;}
-  details[open] .g-chev{ transform:rotate(180deg);}
-  .g-rule{ font-size:12px; color:#8a8175;}
-  .g-progress{display:flex; align-items:center; gap:8px; min-width:120px;}
-  .g-progress .bar-track{flex:1; margin-top:0;}
-  .g-progress .g-num{font-size:12px; color:#5a5346; white-space:nowrap;}
-  .g-warn{ margin:0 16px 12px; padding:8px 10px; background:var(--warn-bg); color:var(--warn); border-radius:8px; font-size:12.5px;}
-
-  .g-body{ padding:0 12px 12px;}
-  .course{
-    display:flex; align-items:flex-start; gap:10px; padding:11px 8px;
-    border-top:1px solid #efe9d8;
-  }
-  .course:first-child{border-top:0;}
-  .course.is-passed{ background:linear-gradient(90deg, transparent, rgba(79,122,74,.05)); }
-
-  .stamp{
-    flex-shrink:0; width:30px; height:30px; border-radius:50%;
-    border:2px solid #c9c1ac; background:#fff; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:transform .18s, border-color .18s, background .18s;
-    margin-top:1px;
-  }
-  .stamp:hover{ border-color:var(--gold);}
-  .stamp svg{ width:15px; height:15px; opacity:0; transform:scale(.5); transition:opacity .18s, transform .18s;}
-  .course.is-passed .stamp{
-    background:var(--ok); border-color:var(--ok); transform:rotate(-8deg) scale(1.04);
-  }
-  .course.is-passed .stamp svg{ opacity:1; transform:scale(1); }
-
-  .c-body{ flex:1; min-width:0;}
-  .c-top{ display:flex; align-items:center; flex-wrap:wrap; gap:8px 10px;}
-  .c-title{ font-weight:600; font-size:14.5px; cursor:pointer; }
-  .c-code{ font-weight:500; font-size:12px; color:#8a8175; }
-  .c-info-btn{
-    flex-shrink:0; width:22px; height:22px; border-radius:50%; border:1px solid var(--line);
-    background:#fff; color:#8a8175; font-size:13px; line-height:1; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; transition:background .15s, border-color .15s, color .15s;
-  }
-  .c-info-btn:hover{ background:#eee7d5; border-color:var(--gold); color:var(--ink); }
-  .c-units{ font-size:11.5px; color:#8a8175; white-space:nowrap;}
-  .c-status{
-    font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; white-space:nowrap;
-  }
-  .c-status.passed{ background:var(--ok-bg); color:var(--ok);}
-  .c-status.avail{ background:var(--wait-bg); color:var(--wait);}
-  .c-status.locked{ background:var(--lock-bg); color:#726b5c;}
-  .c-meta{ font-size:12px; color:#8a8175; margin-top:3px;}
-  .c-meta b{ color:#5a5346; font-weight:600;}
-  .c-note{ font-size:12px; color:var(--warn); margin-top:3px;}
-
-  .footnote{
-    max-width:900px; margin:26px auto 0; padding:0 14px; font-size:12px; color:#8a8175; line-height:1.8;
-  }
-  .footnote b{color:#5a5346;}
-
-  .toolbar{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
-  .toolbar button{
-    font-family:inherit; font-size:13px; font-weight:600; border-radius:8px; padding:8px 14px;
-    border:1px solid var(--line); background:var(--paper-2); color:var(--ink); cursor:pointer;
-  }
-  .toolbar button:hover{ background:#eee7d5;}
-  .toolbar button.danger{ color:var(--seal); border-color:#e3c3ba;}
-
-  .disclaimer{
-    background:var(--warn-bg); color:#7a4113; border:1px solid #e6cda3; border-radius:var(--radius);
-    padding:12px 14px; font-size:12.5px; margin-bottom:16px; line-height:1.8;
+  :root {
+    --primary: #0d9488;
+    --primary-hover: #0f766e;
+    --primary-light: #ccfbf1;
+    --primary-subtle: #f0fdfa;
+    
+    --bg-app: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f1f5f9;
+    
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-subtle: #94a3b8;
+    
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    
+    --ok: #059669;
+    --ok-bg: #ecfdf5;
+    --ok-border: #a7f3d0;
+    
+    --avail: #0284c7;
+    --avail-bg: #f0f9ff;
+    --avail-border: #bae6fd;
+    
+    --lock: #dc2626;
+    --lock-bg: #fef2f2;
+    --lock-border: #fecaca;
+    
+    --warn: #d97706;
+    --warn-bg: #fffbeb;
+    --warn-border: #fde68a;
+    
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   }
 
-  .grade-wrap{ display:flex; align-items:center; gap:6px; margin-top:6px;}
-  .grade-wrap label{ font-size:11.5px; color:#8a8175;}
-  .grade-input{
-    width:60px; padding:4px 6px; border:1px solid var(--line); border-radius:6px;
-    font-family:'JetBrains Mono','Vazirmatn',monospace; font-size:12.5px; text-align:center;
-    background:#fff; color:var(--ink);
-  }
-  .grade-input:focus{ outline:2px solid var(--gold); outline-offset:1px;}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; font-size: 16px; }
 
-  .summary-card.master{ border-color:#d8c9a3; background:linear-gradient(180deg,#fffdf8,#fbf6ea);}
-  .gpa-row{ margin-top:2px; padding-top:10px; border-top:1px dashed var(--line);}
-
-  @media (max-width:520px){
-    h1{font-size:22px;}
-    .g-progress{min-width:90px;}
-    .c-units{font-size:10.5px;}
+  body {
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+    line-height: 1.5;
+    padding-bottom: 60px;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .rel-overlay{
-    position:fixed; inset:0; background:rgba(19,42,46,.45); z-index:50;
-    display:flex; align-items:flex-end; justify-content:center;
-    animation:relFadeIn .15s ease;
+  .num {
+    font-family: 'JetBrains Mono', 'Vazirmatn', monospace;
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    display: inline-block;
+    unicode-bidi: isolate;
   }
-  @keyframes relFadeIn{ from{opacity:0;} to{opacity:1;} }
-  .rel-sheet{
-    background:var(--paper-2); border-radius:16px 16px 0 0; width:100%; max-width:520px;
-    max-height:80vh; overflow-y:auto; padding:18px 18px 22px; box-shadow:0 -8px 30px rgba(19,42,46,.25);
-    animation:relSlideUp .18s ease;
+
+  /* HEADER */
+  header.top {
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 14px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
-  @media (min-width:560px){
-    .rel-overlay{ align-items:center; }
-    .rel-sheet{ border-radius:var(--radius); }
+  .top-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
-  @keyframes relSlideUp{ from{transform:translateY(16px); opacity:0;} to{transform:translateY(0); opacity:1;} }
-  .rel-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:4px;}
-  .rel-title{ font-weight:700; font-size:15.5px;}
-  .rel-code{ font-weight:500; font-size:12px; color:#8a8175; margin-top:2px;}
-  .rel-close{
-    flex-shrink:0; width:28px; height:28px; border-radius:50%; border:1px solid var(--line);
-    background:#fff; color:var(--ink); font-size:15px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
-  .rel-close:hover{ background:#eee7d5;}
-  .rel-section{ margin-top:14px;}
-  .rel-section h4{ font-size:12.5px; color:#8a8175; margin:0 0 6px; font-weight:700;}
-  .rel-chips{ display:flex; flex-direction:column; gap:6px;}
-  .rel-chip{
-    display:flex; align-items:center; justify-content:space-between; gap:8px;
-    padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#fbf9f3; font-size:13px;
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    overflow: hidden;
   }
-  .rel-chip .rc-title{ font-weight:600;}
-  .rel-chip .rc-tag{ font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:999px; white-space:nowrap;}
-  .rel-chip .rc-tag.done{ background:var(--ok-bg); color:var(--ok);}
-  .rel-chip .rc-tag.todo{ background:var(--lock-bg); color:#5c564a;}
-  .rel-empty{ font-size:12.5px; color:#8a8175;}
+  .brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  h1 {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #ffffff;
+  }
+  .header-sub {
+    font-size: 11.5px;
+    color: #94a3b8;
+  }
+  .icon-btn {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .icon-btn:hover {
+    background: #334155;
+    color: #ffffff;
+  }
+
+  /* MAIN WRAPPER */
+  .wrap {
+    max-width: 860px;
+    margin: 18px auto 0;
+    padding: 0 16px;
+  }
+
+  /* MASTER SUMMARY DASHBOARD */
+  .dash-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .dash-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+  .dash-badge {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .dash-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 580px) {
+    .dash-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .stat-box {
+    background: var(--bg-app);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .stat-val {
+    font-size: 18px;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', 'Vazirmatn', monospace;
+    color: var(--text-main);
+    line-height: 1.2;
+  }
+  .stat-val.primary { color: var(--primary); }
+  .stat-val.success { color: var(--ok); }
+  .stat-val.warning { color: var(--warn); }
+  .stat-sub {
+    font-size: 10px;
+    color: var(--text-subtle);
+    margin-top: 2px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-top: 4px; }
+  .bar-track {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar-track.mini { height: 6px; }
+  .bar-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+
+  /* SEGMENTED TABS */
+  nav.tabs {
+    display: flex;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 4px;
+    border-radius: var(--radius-md);
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  nav.tabs button {
+    flex: 1;
+    padding: 9px 8px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  nav.tabs button.active {
+    background: var(--bg-surface);
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* FILTER PILLS */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .filter-pill {
+    flex: 1;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .filter-pill:hover {
+    background: var(--bg-subtle);
+    color: var(--text-main);
+  }
+  .filter-pill.active {
+    background: var(--text-main);
+    color: #ffffff;
+    border-color: var(--text-main);
+  }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* SECTION SUMMARY MINI BAR */
+  .section-summary-pill {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .s-summary-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12.5px;
+  }
+  .s-summary-title { font-weight: 700; color: var(--text-main); }
+  .s-summary-nums { color: var(--text-muted); font-size: 12px; }
+
+  /* SUGGESTIONS BOX (PROMINENT FEATURED) */
+  .suggest-box {
+    background: var(--bg-surface);
+    border: 1.5px solid var(--primary-light);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.05);
+  }
+  .suggest-head { margin-bottom: 12px; }
+  .suggest-title-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .suggest-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .suggest-h2 {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0;
+  }
+  .suggest-sub {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .suggest-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .suggest-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-subtle);
+  }
+  .suggest-item .tag {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .tag.mandatory { background: #fef3c7; color: #92400e; }
+  .tag.quota { background: #e0f2fe; color: #075985; }
+  .suggest-item .body { flex: 1; min-width: 0; }
+  .suggest-item .body .t { font-weight: 700; font-size: 13.5px; color: var(--text-main); }
+  .suggest-item .body .s-units { font-weight: 500; font-size: 11.5px; color: var(--text-muted); }
+  .suggest-item .body .r { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+  .suggest-item .body .r.r-warn { color: #b91c1c; font-weight: 600; }
+  .dismiss-btn {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .dismiss-btn:hover { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+  .suggest-empty {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 4px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  /* ACCORDIONS / GROUPS */
+  details.group {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+  details.group[open] { border-color: #cbd5e1; }
+  details.group > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    user-select: none;
+  }
+  details.group > summary::-webkit-details-marker { display: none; }
+  .g-left { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+  .g-title { font-weight: 700; font-size: 13.5px; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+  .complete-badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ok);
+    background: var(--ok-bg);
+    padding: 2px 6px;
+    border-radius: 999px;
+  }
+  .g-rule { font-size: 11px; color: var(--text-muted); }
+  .g-progress { display: flex; align-items: center; gap: 8px; min-width: 90px; }
+  .g-progress .g-num { font-size: 11px; color: var(--text-muted); white-space: nowrap; font-weight: 600; }
+  .g-chev { transition: transform 0.2s ease; color: var(--text-subtle); flex-shrink: 0; display: flex; align-items: center; }
+  details[open] .g-chev { transform: rotate(180deg); }
+  .g-warn { margin: 0 14px 10px; padding: 8px 12px; background: var(--warn-bg); color: #92400e; border: 1px solid var(--warn-border); border-radius: var(--radius-sm); font-size: 11.5px; }
+
+  /* COURSE LIST & CARDS */
+  .g-body { padding: 2px 10px 10px; }
+  .course {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 8px;
+    border-top: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    transition: background 0.15s ease;
+  }
+  .course:first-child { border-top: 0; }
+  .course:hover { background: var(--bg-subtle); }
+  .course.is-passed { background: var(--ok-bg); }
+
+  /* STAMP / CHECKBOX */
+  .stamp {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid #cbd5e1;
+    background: var(--bg-surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    margin-top: 2px;
+  }
+  .stamp:hover { border-color: var(--primary); }
+  .stamp svg { width: 13px; height: 13px; opacity: 0; color: #fff; transition: opacity 0.15s ease; }
+  .course.is-passed .stamp { background: var(--ok); border-color: var(--ok); }
+  .course.is-passed .stamp svg { opacity: 1; }
+
+  .c-body { flex: 1; min-width: 0; }
+  .c-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; }
+  .c-title-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .c-title { font-weight: 600; font-size: 13.5px; color: var(--text-main); cursor: pointer; }
+  .c-code { font-size: 10.5px; color: var(--text-muted); background: var(--bg-app); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; }
+  .c-badges { display: flex; align-items: center; gap: 6px; }
+  .c-units { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+  .c-status { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
+  .c-status.passed { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok-border); }
+  .c-status.avail { background: var(--avail-bg); color: var(--avail); border: 1px solid var(--avail-border); }
+  .c-status.locked { background: var(--lock-bg); color: var(--lock); border: 1px solid var(--lock-border); }
+
+  .c-info-btn {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .c-info-btn:hover { background: var(--bg-subtle); color: var(--text-main); }
+
+  .c-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .meta-label { font-weight: 600; color: var(--text-main); }
+  .c-note { font-size: 11px; color: #b91c1c; margin-top: 3px; }
+
+  .grade-wrap { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+  .grade-wrap label { font-size: 11px; color: var(--text-muted); }
+  .grade-input {
+    width: 54px;
+    padding: 3px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'JetBrains Mono', 'Vazirmatn', monospace;
+    font-size: 11.5px;
+    text-align: center;
+    background: var(--bg-surface);
+    color: var(--text-main);
+  }
+  .grade-input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+  .group-empty-filter {
+    font-size: 12px;
+    color: var(--text-subtle);
+    padding: 10px 4px;
+    text-align: center;
+  }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: #f8fafc;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-size: 11px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  /* FOOTNOTE */
+  .footnote {
+    max-width: 860px;
+    margin: 24px auto 0;
+    padding: 0 16px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .eyebrow a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+  /* SETTINGS MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.15s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal-sheet {
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    width: 100%;
+    max-width: 420px;
+    padding: 18px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    animation: slideUp 0.18s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-head h3 { font-size: 15px; font-weight: 700; color: var(--text-main); margin: 0; }
+  .close-btn {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+  }
+  .close-btn:hover { color: var(--text-main); }
+
+  .toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tool-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tool-btn:hover { background: var(--bg-subtle); }
+  .tool-btn.primary { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+  .tool-btn.primary:hover { background: var(--primary-hover); }
+  .tool-btn.danger { color: #dc2626; border-color: #fca5a5; background: #fef2f2; }
+  .tool-btn.danger:hover { background: #fee2e2; }
+
+  /* RELATIONSHIP BOTTOM SHEET */
+  .rel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeIn 0.15s ease;
+  }
+  @media (min-width: 560px) {
+    .rel-overlay { align-items: center; }
+  }
+  .rel-sheet {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    width: 100%;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 18px;
+    box-shadow: 0 -10px 25px rgba(0,0,0,0.1);
+    animation: slideUp 0.18s ease;
+  }
+  @media (min-width: 560px) {
+    .rel-sheet { border-radius: var(--radius-md); }
+  }
+  .rel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .rel-title { font-weight: 800; font-size: 15px; color: var(--text-main); }
+  .rel-code { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+  .rel-close { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .rel-section { margin-top: 12px; }
+  .rel-section h4 { font-size: 11.5px; color: var(--text-muted); margin: 0 0 6px; font-weight: 700; }
+  .rel-chips { display: flex; flex-direction: column; gap: 6px; }
+  .rel-chip { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-app); font-size: 12px; }
+  .rel-chip .rc-title { font-weight: 600; color: var(--text-main); }
+  .rel-chip .rc-tag { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 999px; white-space: nowrap; }
+  .rel-chip .rc-tag.done { background: var(--ok-bg); color: var(--ok); }
+  .rel-chip .rc-tag.todo { background: var(--lock-bg); color: var(--lock); }
+  .rel-empty { font-size: 11.5px; color: var(--text-subtle); }
+
+  /* MOBILE RESPONSIVENESS SPECIFIC FIXES (360px - 430px) */
+  @media (max-width: 480px) {
+    header.top { padding: 10px 14px; }
+    .wrap { padding: 0 12px; margin-top: 12px; }
+    .dash-card { padding: 14px; }
+    .dash-title { font-size: 13.5px; }
+    .stat-val { font-size: 16px; }
+    .c-top { flex-direction: column; align-items: flex-start; }
+    .c-badges { width: 100%; justify-content: space-between; margin-top: 2px; }
+  }
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="top-inner">
-    <h1>واحد یار</h1>
-    <p>دروسی که پاس کردی رو تیک بزن؛ برنامه خودش پیش‌نیازها رو چک می‌کنه و بهت می‌گه این ترم چی رو منطقی‌تره برداری.</p>
+    <div class="header-brand">
+      <div class="brand-logo"><img src="icon_192.png" alt="واحد یار" /></div>
+
+      <div>
+        <h1>واحد یار</h1>
+        <div class="header-sub">مدیریت هوشمند چارت و دروس ترمیک</div>
+      </div>
+    </div>
+    <button id="menuToggleBtn" class="icon-btn" aria-label="تنظیمات و ابزارها">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+    </button>
   </div>
 </header>
 
 <div class="wrap">
+  <!-- MASTER SUMMARY DASHBOARD -->
   <div id="master-summary"></div>
 
+  <!-- NAVIGATION TABS -->
   <nav class="tabs">
     <button class="active" data-tab="elec">برق - الکترونیک</button>
     <button data-tab="islamic">معارف اسلامی</button>
     <button data-tab="general">دروس عمومی</button>
   </nav>
 
-  <div class="toolbar">
-    <button id="exportBtn">خروجی گرفتن از وضعیت</button>
-    <button id="importBtn">وارد کردن وضعیت</button>
-    <button id="chartBtn">دانلود چارت کامل (PDF)</button>
-    <button id="resetBtn" class="danger">پاک کردن همه تیک‌ها</button>
-    <button id="installBtn" style="display:none;">نصب روی دستگاه</button>
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-pills">
+      <button class="filter-pill active" data-filter="all">همه</button>
+      <button class="filter-pill" data-filter="avail">● قابل اخذ</button>
+      <button class="filter-pill" data-filter="locked">✗ غیرقابل اخذ</button>
+      <button class="filter-pill" data-filter="passed">✓ گذرانده</button>
+    </div>
   </div>
 
   <!-- ELECTRONICS PANEL -->
   <section id="panel-elec" class="panel active">
     <div class="disclaimer">
-      داده‌های این بخش از روی درختواره «رشته مهندسی برق - گرایش الکترونیک، مصوبه ۱۷۹ مورخ ۱۴۰۳/۰۴/۱۰، دانشگاه آزاد اسلامی واحد تهران شمال» استخراج شده.
+      داده‌های این بخش از روی درختواره «رشته مهندسی برق - گرایش الکترونیک، مصوبه ۱۷۹ مورخ ۱۴۰۳/۰۴/۱۰، دانشگاه آزاد اسلامی واحد تهران شمال» استخراج شده است.
     </div>
     <div id="elec-summary"></div>
     <div id="elec-suggest"></div>
@@ -309,7 +767,7 @@
   <!-- ISLAMIC PANEL -->
   <section id="panel-islamic" class="panel">
     <div class="disclaimer">
-      طبق آیین‌نامه، هر ترم (حتی ترم آخر یا تابستان) فقط <b>۲ واحد</b> معارف اسلامی مجازی، مگر با نظر مدیر گروه معارف که تا <b>۴ واحد</b> می‌شه. دانشجوی اقلیت دینی محدودیت انتخاب گرایش نداره و از «انس با قرآن کریم» معافه.
+      طبق آیین‌نامه، هر ترم (حتی ترم آخر یا تابستان) فقط <b>۲ واحد</b> معارف اسلامی مجاز است، مگر با نظر مدیر گروه معارف که تا <b>۴ واحد</b> امکان‌پذیر است.
     </div>
     <div id="islamic-summary"></div>
     <div id="islamic-suggest"></div>
@@ -323,10 +781,38 @@
     <div id="general-groups"></div>
   </section>
   
-<p class="footnote">
-  <span class="eyebrow">● پشتیبانی: <a href="https://t.me/cpuoff" target="_blank">@cpuoff</a></span>
-</p>
-  
+  <p class="footnote">
+    <span class="eyebrow">● پشتیبانی: <a href="https://t.me/cpuoff" target="_blank">@cpuoff</a></span>
+  </p>
+</div>
+
+<!-- SETTINGS & ACTIONS MODAL -->
+<div id="settingsModal" class="modal-overlay" style="display:none;">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <h3>تنظیمات و ابزارها</h3>
+      <button id="closeSettingsBtn" class="close-btn" aria-label="بستن">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="toolbar">
+        <button id="chartBtn" class="tool-btn primary">
+          📄 دانلود چارت کامل (PDF)
+        </button>
+        <button id="exportBtn" class="tool-btn">
+          📤 پشتیبان‌گیری (خروجی JSON)
+        </button>
+        <button id="importBtn" class="tool-btn">
+          📥 بازیابی وضعیت (وارد کردن JSON)
+        </button>
+        <button id="installBtn" class="tool-btn" style="display:none;">
+          📱 نصب روی دستگاه (PWA)
+        </button>
+        <button id="resetBtn" class="tool-btn danger">
+          🗑️ پاک کردن همه تیک‌ها و نمره‌ها
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <input type="file" id="importFile" accept="application/json" style="display:none">
@@ -334,11 +820,6 @@
 <script>
 /* ============================= DATA ============================= */
 
-// ---------- Electronics Engineering (Electronics track) ----------
-// id, title, t = theory units, p = practical units, pre = prerequisite ids,
-// co = corequisite ids (shown as info, not blocking), preText = external/special prereq note,
-// minTotalUnits = special condition requiring N total passed units across this dataset,
-// note = extra note, variableUnits = true when units aren't fixed in the source table.
 const ELEC_COURSES = [
   {id:'e1', title:'ریاضی عمومی ۱', code:'7000031867', t:3, p:0, pre:[], co:[]},
   {id:'e2', title:'ریاضی عمومی ۲', code:'7000031868', t:3, p:0, pre:['e1'], co:[]},
@@ -350,7 +831,7 @@ const ELEC_COURSES = [
   {id:'e8', title:'آزمایشگاه فیزیک', code:'7000031873', t:0, p:1, pre:[], co:['e4']},
 
   {id:'e9', title:'آمار و احتمال مهندسی', code:'7000031881', t:3, p:0, pre:[], co:['e2']},
-  {id:'e10', title:'زبان تخصصی', code:'7000031875', t:2, p:0, pre:[], co:[], preText:'زبان عمومی (پیش‌دانشگاهی/ترکیبی ۱-۳)'},
+  {id:'e10', title:'زبان تخصصی', code:'7000031875', t:2, p:0, pre:['x_lang3'], co:[]},
   {id:'e11', title:'روش‌های محاسباتی در مهندسی برق', code:'7000031876', t:2, p:0, pre:['e1'], co:['e6']},
   {id:'e12', title:'کارگاه برق', code:'7000031893', t:0, p:1, pre:['e7'], co:[]},
   {id:'e13', title:'ریاضیات مهندسی', code:'7000031880', t:3, p:0, pre:['e2','e5'], co:[]},
@@ -425,7 +906,6 @@ const ELEC_GROUPS = [
   {id:'electives', title:'دروس اختیاری', rule:'حداقل ۱۳ واحد از این فهرست (دفاع مقدس الزامی‌ست جزوشون باشه)', kind:'unitsMin', min:13, ids:['e54','e55','e56','e57','e58','e59','e60','e61','e62','e63','e64','e65','e_defa','e_karafarini']},
 ];
 
-// ---------- Islamic Studies electives ----------
 const ISLAMIC_COURSES = [
   {id:'i1', title:'اندیشه اسلامی ۱ (مبدأ و معاد)', code:'90610', u:2, pre:[]},
   {id:'i2', title:'اندیشه اسلامی ۲ (نبوت و امامت)', code:'98841', u:2, pre:['i1']},
@@ -462,10 +942,6 @@ const ISLAMIC_GROUPS = [
   {id:'mandatory', title:'دروس اجباری', rule:'هر دو الزامیه - ۳ واحد', kind:'all', ids:['i18','i19']},
 ];
 
-// ---------- General education courses (دروس عمومی، غیر از معارف اسلامی) ----------
-// زبان پیش‌دانشگاهی یک واحد جبرانی است: در جمع ۱۴۴ واحد فارغ‌التحصیلی محاسبه نمی‌شود،
-// فقط پیش‌نیاز زبان ترکیبی ۱ است. «انس با قرآن کریم» تکراریه و در تب معارف اسلامی موجوده،
-// اینجا دوباره اضافه نشده.
 const GENERAL_COURSES = [
   {id:'x_farsi', title:'فارسی عمومی', code:'90029', u:3, pre:[]},
   {id:'x_lang_pre', title:'زبان پیش‌دانشگاهی', code:'99093', u:2, pre:[], excludeFromTotal:true, note:'واحد جبرانی است؛ در مجموع ۱۴۴ واحد فارغ‌التحصیلی محاسبه نمی‌شود، فقط پیش‌نیاز زبان ترکیبی ۱ است.'},
@@ -515,16 +991,17 @@ const state = {
 };
 const COURSES_BY_KEY = { elec: ELEC_COURSES, islamic: ISLAMIC_COURSES, general: GENERAL_COURSES };
 
+let activeFilter = 'all';
+
 /* ============================= LOGIC ============================= */
 
 function byId(list, id){ return list.find(c=>c.id===id); }
 
 function unitsOf(course){
   if(course.variableUnits) return 0;
-  if(typeof course.u === 'number') return course.u; // islamic / general courses
-  return (course.t||0) + (course.p||0); // elec courses
+  if(typeof course.u === 'number') return course.u;
+  return (course.t||0) + (course.p||0);
 }
-// Units that count toward the 144-unit graduation total (excludes remedial/جبرانی courses)
 function creditUnitsOf(course){
   return course.excludeFromTotal ? 0 : unitsOf(course);
 }
@@ -543,7 +1020,7 @@ function groupsRequiredTotal(groups, courses){
   return groups.reduce((s,g)=>{
     if(g.kind==='all') return s + g.ids.reduce((s2,id)=>s2+creditUnitsOf(byId(courses,id)),0);
     if(g.kind==='countMin') return s + (typeof g.unitGoal==='number' ? g.unitGoal : g.min);
-    return s + g.min; // unitsMin: min already expressed in units
+    return s + g.min;
   },0);
 }
 
@@ -563,21 +1040,29 @@ function computeGPA(){
   return { gpa: gradedUnits ? (weighted/gradedUnits) : null, gradedUnits, gradedCount };
 }
 
-// A corequisite course is "reachable" (can be taken together with, or has already
-// been taken before, the course that requires it) if it's already passed, or if
-// its own prerequisites are all satisfied (so it could be taken this same term).
 function coreqReachable(coId, passedSet){
-  if(passedSet.has(coId)) return true;
+  if(pidPassed(coId, passedSet)) return true;
   const co = byId(ELEC_COURSES, coId) || byId(ISLAMIC_COURSES, coId) || byId(GENERAL_COURSES, coId);
-  if(!co) return true; // co outside this list (e.g. coText note) - can't verify, don't block
-  return (co.pre||[]).every(pid=>passedSet.has(pid));
+  if(!co) return true;
+  return (co.pre||[]).every(pid=>pidPassed(pid, passedSet));
+}
+
+function pidPassed(pid, passedSet){
+  // Prerequisites can point to a course in a different section than the
+  // course that declares them (e.g. an ELEC_COURSES course requiring a
+  // GENERAL_COURSES language course). Check the set that actually owns
+  // that prerequisite id, not just the calling section's own passedSet.
+  if(passedSet.has(pid)) return true;
+  if(byId(GENERAL_COURSES, pid)) return state.general.has(pid);
+  if(byId(ELEC_COURSES, pid)) return state.elec.has(pid);
+  if(byId(ISLAMIC_COURSES, pid)) return state.islamic.has(pid);
+  return false;
 }
 
 function prereqStatus(course, passedSet){
-  // returns {ok: bool, missing: [titles]}
   const missing = [];
   (course.pre||[]).forEach(pid=>{
-    if(!passedSet.has(pid)){
+    if(!pidPassed(pid, passedSet)){
       const p = byId(ELEC_COURSES, pid) || byId(ISLAMIC_COURSES, pid) || byId(GENERAL_COURSES, pid);
       missing.push(p ? p.title : pid);
     }
@@ -602,7 +1087,6 @@ function courseStatus(course, passedSet){
   return ok ? 'avail' : 'locked';
 }
 
-// how many *other* not-yet-passed courses list this course as a prerequisite
 function unlockCount(course, allCourses, passedSet){
   let n = 0;
   allCourses.forEach(c=>{
@@ -624,13 +1108,12 @@ function groupProgress(group, courses, passedSet){
     const doneCount = list.filter(c=>passedSet.has(c.id)).length;
     return {done:doneCount, total:group.min, complete: doneCount>=group.min, unitsMode:false};
   }
-  // unitsMin
   let excludedIds = new Set();
   if(group.exclusivePairs){
     group.exclusivePairs.forEach(pair=>{
       const [a,b] = pair;
       if(passedSet.has(a) && passedSet.has(b)){
-        excludedIds.add(b); // only count the first as fulfilling quota
+        excludedIds.add(b);
       }
     });
   }
@@ -644,7 +1127,7 @@ function exclusivityWarning(group, passedSet){
     if(passedSet.has(a) && passedSet.has(b)){
       const ca = byId(ISLAMIC_COURSES, a) || byId(ELEC_COURSES,a);
       const cb = byId(ISLAMIC_COURSES, b) || byId(ELEC_COURSES,b);
-      return `طبق مقررات فقط یکی از «${ca.title}» یا «${cb.title}» مجاز به احتساب توی سهمیه‌ست. واحد اضافه به‌عنوان مازاد حساب می‌شه، نه بخشی از این ۱۷/رشته.`;
+      return `طبق مقررات فقط یکی از «${ca.title}» یا «${cb.title}» مجاز به احتساب توی سهمیه‌ست. واحد اضافه به‌عنوان مازاد حساب می‌شه.`;
     }
   }
   return null;
@@ -669,22 +1152,20 @@ function unitsLabel(course){
 
 function titleOf(list, id){ const c = byId(list,id); return c?c.title:id; }
 
-// Courses (from the same list) that list `course.id` in their own `pre` array -
-// i.e. courses for which this course is a direct prerequisite. Only direct
-// dependents, not the whole downstream chain.
 function coursesRequiring(course, courses){
-  return courses.filter(c => (c.pre||[]).includes(course.id));
+  const all = [...ELEC_COURSES, ...ISLAMIC_COURSES, ...GENERAL_COURSES];
+  return all.filter(c => (c.pre||[]).includes(course.id));
 }
 
 function relChip(c, passedSet){
-  const isDone = passedSet.has(c.id);
+  const isDone = pidPassed(c.id, passedSet);
   return `<div class="rel-chip"><span class="rc-title">${escapeHtml(c.title)}</span>` +
-    `<span class="rc-tag ${isDone?'done':'todo'}">${isDone?'گذرانده':'گذرونده نشده'}</span></div>`;
+    `<span class="rc-tag ${isDone?'done':'todo'}">${isDone?'گذرانده':'گذرانده نشده'}</span></div>`;
 }
 
 function openRelationshipSheet(course, courses, passedSet){
-  const pre = (course.pre||[]).map(id=>byId(courses,id)).filter(Boolean);
-  const co = (course.co||[]).map(id=>byId(courses,id)).filter(Boolean);
+  const pre = (course.pre||[]).map(id=>byId(courses,id) || byId(ELEC_COURSES,id) || byId(ISLAMIC_COURSES,id) || byId(GENERAL_COURSES,id)).filter(Boolean);
+  const co = (course.co||[]).map(id=>byId(courses,id) || byId(ELEC_COURSES,id) || byId(ISLAMIC_COURSES,id) || byId(GENERAL_COURSES,id)).filter(Boolean);
   const dependents = coursesRequiring(course, courses);
 
   const overlay = document.createElement('div');
@@ -699,13 +1180,13 @@ function openRelationshipSheet(course, courses, passedSet){
   sectionsHtml.push(`<div class="rel-section"><h4>پیش‌نیاز این درس</h4>` +
     (pre.length || course.preText
       ? `<div class="rel-chips">${pre.map(c=>relChip(c, passedSet)).join('')}${course.preText && !pre.length ? `<div class="rel-empty">${escapeHtml(course.preText)}</div>` : ''}</div>`
-      : `<div class="rel-empty">پیش‌نیازی نداره</div>`) +
+      : `<div class="rel-empty">پیش‌نیازی ندارد</div>`) +
     `</div>`);
 
   sectionsHtml.push(`<div class="rel-section"><h4>هم‌نیاز این درس</h4>` +
     (co.length || course.coText
       ? `<div class="rel-chips">${co.map(c=>relChip(c, passedSet)).join('')}${course.coText && !co.length ? `<div class="rel-empty">${escapeHtml(course.coText)}</div>` : ''}</div>`
-      : `<div class="rel-empty">هم‌نیازی نداره</div>`) +
+      : `<div class="rel-empty">هم‌نیازی ندارد</div>`) +
     `</div>`);
 
   sectionsHtml.push(`<div class="rel-section"><h4>درس‌هایی که این درس پیش‌نیازشونه</h4>` +
@@ -718,7 +1199,7 @@ function openRelationshipSheet(course, courses, passedSet){
     <div class="rel-head">
       <div>
         <div class="rel-title">${escapeHtml(course.title)}</div>
-        ${course.code ? `<div class="rel-code num">${escapeHtml(course.code)}</div>` : ''}
+        ${course.code ? `<div class="rel-code num">کد درس: ${escapeHtml(course.code)}</div>` : ''}
       </div>
       <button type="button" class="rel-close" aria-label="بستن">✕</button>
     </div>
@@ -738,8 +1219,10 @@ function renderCourseRow(course, courses, passedSet, setKey){
 
   const stamp = document.createElement('div');
   stamp.className = 'stamp';
-  stamp.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-  stamp.addEventListener('click', ()=>{
+  stamp.title = passed ? 'علامت‌گذاری به‌عنوان خوانده‌نشده' : 'علامت‌گذاری به‌عنوان گذرانده';
+  stamp.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  stamp.addEventListener('click', (e)=>{
+    e.stopPropagation();
     const set = state[setKey];
     if(set.has(course.id)) set.delete(course.id); else set.add(course.id);
     saveState();
@@ -752,10 +1235,24 @@ function renderCourseRow(course, courses, passedSet, setKey){
   const top = document.createElement('div');
   top.className = 'c-top';
 
+  const titleGroup = document.createElement('div');
+  titleGroup.className = 'c-title-group';
+
   const title = document.createElement('span');
   title.className = 'c-title';
-  title.innerHTML = escapeHtml(course.title) + (course.code ? ' <span class="c-code num">(' + escapeHtml(course.code) + ')</span>' : '');
+  title.textContent = course.title;
   title.addEventListener('click', ()=>stamp.click());
+
+  titleGroup.appendChild(title);
+  if(course.code){
+    const code = document.createElement('span');
+    code.className = 'c-code num';
+    code.textContent = course.code;
+    titleGroup.appendChild(code);
+  }
+
+  const metaBadges = document.createElement('div');
+  metaBadges.className = 'c-badges';
 
   const units = document.createElement('span');
   units.className = 'c-units';
@@ -763,22 +1260,30 @@ function renderCourseRow(course, courses, passedSet, setKey){
 
   const badge = document.createElement('span');
   badge.className = 'c-status ' + status;
-  badge.textContent = status==='passed' ? 'گذرانده' : status==='avail' ? 'قابل اخذ' : 'نیازمند پیش‌نیاز';
+  if (status === 'passed') {
+    badge.innerHTML = '✓ گذرانده';
+  } else if (status === 'avail') {
+    badge.innerHTML = '● قابل اخذ';
+  } else {
+    badge.innerHTML = '✗ غیرقابل اخذ';
+  }
 
   const infoBtn = document.createElement('button');
   infoBtn.type = 'button';
   infoBtn.className = 'c-info-btn';
   infoBtn.setAttribute('aria-label', 'روابط پیش‌نیازی درس');
-  infoBtn.textContent = '⋮';
+  infoBtn.innerHTML = '⋮';
   infoBtn.addEventListener('click', (e)=>{
     e.stopPropagation();
     openRelationshipSheet(course, courses, passedSet);
   });
 
-  top.appendChild(title);
-  top.appendChild(units);
-  top.appendChild(badge);
-  top.appendChild(infoBtn);
+  metaBadges.appendChild(units);
+  metaBadges.appendChild(badge);
+  metaBadges.appendChild(infoBtn);
+
+  top.appendChild(titleGroup);
+  top.appendChild(metaBadges);
   body.appendChild(top);
 
   if(!passed){
@@ -786,26 +1291,26 @@ function renderCourseRow(course, courses, passedSet, setKey){
     if(missing.length){
       const meta = document.createElement('div');
       meta.className = 'c-meta';
-      meta.innerHTML = '<b>پیش‌نیاز باقی‌مانده:</b> ' + missing.join('، ');
+      meta.innerHTML = '<span class="meta-label">پیش‌نیاز باقی‌مانده:</span> ' + missing.join('، ');
       body.appendChild(meta);
     }
   }
   if(course.co && course.co.length){
     const meta = document.createElement('div');
     meta.className = 'c-meta';
-    meta.innerHTML = '<b>هم‌نیاز:</b> ' + course.co.map(id=>titleOf(courses,id)).join('، ');
+    meta.innerHTML = '<span class="meta-label">هم‌نیاز:</span> ' + course.co.map(id=>titleOf(courses,id)).join('، ');
     body.appendChild(meta);
   }
   if(course.coText){
     const meta = document.createElement('div');
     meta.className = 'c-meta';
-    meta.innerHTML = '<b>هم‌نیاز:</b> ' + course.coText;
+    meta.innerHTML = '<span class="meta-label">هم‌نیاز:</span> ' + course.coText;
     body.appendChild(meta);
   }
   if(course.preText){
     const meta = document.createElement('div');
     meta.className = 'c-meta';
-    meta.innerHTML = '<b>پیش‌نیاز:</b> ' + course.preText;
+    meta.innerHTML = '<span class="meta-label">پیش‌نیاز:</span> ' + course.preText;
     body.appendChild(meta);
   }
   if(course.note){
@@ -847,10 +1352,12 @@ function renderCourseRow(course, courses, passedSet, setKey){
 function renderGroups(containerId, groups, courses, passedSet, setKey){
   const container = document.getElementById(containerId);
   container.innerHTML = '';
+  
   groups.forEach(group=>{
     const prog = groupProgress(group, courses, passedSet);
     const details = document.createElement('details');
     details.className = 'group';
+    // Collapse complete groups by default
     details.open = !prog.complete;
 
     const summary = document.createElement('summary');
@@ -858,7 +1365,7 @@ function renderGroups(containerId, groups, courses, passedSet, setKey){
     gLeft.className = 'g-left';
     const gTitle = document.createElement('div');
     gTitle.className = 'g-title';
-    gTitle.textContent = group.title + (prog.complete ? ' ✓' : '');
+    gTitle.innerHTML = escapeHtml(group.title) + (prog.complete ? ' <span class="complete-badge">✓ کامل شد</span>' : '');
     const gRule = document.createElement('div');
     gRule.className = 'g-rule';
     gRule.textContent = group.rule;
@@ -868,7 +1375,7 @@ function renderGroups(containerId, groups, courses, passedSet, setKey){
     const gProgress = document.createElement('div');
     gProgress.className = 'g-progress';
     const barTrack = document.createElement('div');
-    barTrack.className = 'bar-track';
+    barTrack.className = 'bar-track mini';
     const barFill = document.createElement('div');
     barFill.className = 'bar-fill';
     const pct = Math.min(100, Math.round((prog.done/Math.max(prog.total,1))*100));
@@ -876,7 +1383,7 @@ function renderGroups(containerId, groups, courses, passedSet, setKey){
     barTrack.appendChild(barFill);
     const gNum = document.createElement('div');
     gNum.className = 'g-num';
-    gNum.innerHTML = '<span class="num">' + prog.done + ' / ' + prog.total + '</span>' + (prog.unitsMode ? ' واحد' : ' درس');
+    gNum.innerHTML = '<span class="num">' + prog.done + ' / ' + prog.total + '</span> ' + (prog.unitsMode ? 'واحد' : 'درس');
     gProgress.appendChild(barTrack);
     gProgress.appendChild(gNum);
 
@@ -899,12 +1406,24 @@ function renderGroups(containerId, groups, courses, passedSet, setKey){
 
     const body = document.createElement('div');
     body.className = 'g-body';
+    
+    let renderedCourses = 0;
     group.ids.forEach(id=>{
       const course = byId(courses, id);
+      const status = courseStatus(course, passedSet);
+      if(activeFilter !== 'all' && status !== activeFilter) return;
+      renderedCourses++;
       body.appendChild(renderCourseRow(course, courses, passedSet, setKey));
     });
-    details.appendChild(body);
 
+    if(activeFilter !== 'all' && renderedCourses === 0) {
+      const emptyMsg = document.createElement('div');
+      emptyMsg.className = 'group-empty-filter';
+      emptyMsg.textContent = 'درسی با این وضعیت در این گروه یافت نشد.';
+      body.appendChild(emptyMsg);
+    }
+
+    details.appendChild(body);
     container.appendChild(details);
   });
 }
@@ -913,21 +1432,18 @@ function renderSummary(containerId, groups, courses, passedSet, sectionLabel){
   const container = document.getElementById(containerId);
   const totalDone = courses.reduce((s,c)=> passedSet.has(c.id) ? s+creditUnitsOf(c) : s, 0);
   const totalAll = groupsRequiredTotal(groups, courses);
-  container.innerHTML = '';
-  const card = document.createElement('div');
-  card.className = 'summary-card';
-  const row = document.createElement('div');
-  row.className='summary-row';
-  row.innerHTML = `<span class="summary-title">جمع واحدهای این بخش (${sectionLabel})</span><span class="summary-num"><span class="num">${totalDone}</span> از <span class="num">${totalAll}</span> واحد</span>`;
-  const track = document.createElement('div');
-  track.className='bar-track';
-  const fill = document.createElement('div');
-  fill.className='bar-fill';
-  fill.style.width = Math.min(100, Math.round(totalDone/Math.max(totalAll,1)*100)) + '%';
-  track.appendChild(fill);
-  card.appendChild(row);
-  card.appendChild(track);
-  container.appendChild(card);
+  const pct = Math.min(100, Math.round(totalDone / Math.max(totalAll,1) * 100));
+  container.innerHTML = `
+    <div class="section-summary-pill">
+      <div class="s-summary-info">
+        <span class="s-summary-title">پیشرفت ${sectionLabel}</span>
+        <span class="s-summary-nums"><b class="num">${totalDone}</b> / <span class="num">${totalAll}</span> واحد (<span class="num">${pct}%</span>)</span>
+      </div>
+      <div class="bar-track mini">
+        <div class="bar-fill" style="width: ${pct}%"></div>
+      </div>
+    </div>
+  `;
 }
 
 function renderMasterSummary(){
@@ -939,36 +1455,45 @@ function renderMasterSummary(){
   const grandTotal = elecTotal + islamicTotal + generalTotal;
   const done = combinedPassedUnits();
   const {gpa, gradedUnits, gradedCount} = computeGPA();
+  const pct = Math.min(100, Math.round(done / Math.max(grandTotal, 1) * 100));
 
-  container.innerHTML = '';
-  const card = document.createElement('div');
-  card.className = 'summary-card master';
-
-  const row = document.createElement('div');
-  row.className = 'summary-row';
-  row.innerHTML = `<span class="summary-title">کارنامهٔ کلی - همهٔ ۳ بخش</span><span class="summary-num"><span class="num">${done}</span> از <span class="num">${grandTotal}</span> واحد</span>`;
-  const track = document.createElement('div');
-  track.className = 'bar-track';
-  const fill = document.createElement('div');
-  fill.className = 'bar-fill';
-  fill.style.width = Math.min(100, Math.round(done/Math.max(grandTotal,1)*100)) + '%';
-  track.appendChild(fill);
-
-  const gpaRow = document.createElement('div');
-  gpaRow.className = 'summary-row gpa-row';
-  if(gpa===null){
-    gpaRow.innerHTML = `<span class="summary-title">معدل کل</span><span class="summary-num">هنوز نمره‌ای ثبت نکردی - کنار هر درسِ گذرونده می‌تونی نمره بزنی</span>`;
-  }else{
-    gpaRow.innerHTML = `<span class="summary-title">معدل کل</span><span class="summary-num"><span class="num">${gpa.toFixed(2)}</span> <span style="color:#8a8175;font-weight:400;">(بر اساس <span class="num">${gradedCount}</span> درس / <span class="num">${gradedUnits}</span> واحدِ نمره‌دار)</span></span>`;
-  }
-
-  card.appendChild(row);
-  card.appendChild(track);
-  card.appendChild(gpaRow);
-  container.appendChild(card);
+  container.innerHTML = `
+    <div class="dash-card">
+      <div class="dash-header">
+        <div class="dash-title">داشبورد وضعیت تحصیلی</div>
+        <div class="dash-badge"><span class="num">${pct}%</span> پیشرفت کل</div>
+      </div>
+      <div class="dash-stats">
+        <div class="stat-box">
+          <div class="stat-label">معدل کل</div>
+          <div class="stat-val primary">${gpa !== null ? gpa.toFixed(2) : '-'}</div>
+          <div class="stat-sub">${gpa !== null ? `${gradedCount} درس نمره‌دار` : 'ثبت نشده'}</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">واحد گذرانده</div>
+          <div class="stat-val success"><span class="num">${done}</span></div>
+          <div class="stat-sub">تأیید شده</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">کل واحدها</div>
+          <div class="stat-val"><span class="num">${grandTotal}</span></div>
+          <div class="stat-sub">دوره چارت</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">واحد باقی‌مانده</div>
+          <div class="stat-val warning"><span class="num">${Math.max(0, grandTotal - done)}</span></div>
+          <div class="stat-sub">تا فارغ‌التحصیلی</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="bar-track">
+          <div class="bar-fill" style="width: ${pct}%"></div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-// Session-only dismissals (never persisted): reset to empty on every page load/refresh.
 const dismissed = { elec: new Set(), islamic: new Set(), general: new Set() };
 
 function buildSuggestions(groups, courses, passedSet, dismissedSet){
@@ -988,8 +1513,6 @@ function buildSuggestions(groups, courses, passedSet, dismissedSet){
       if(kind==='mandatory') reasons.push({text:'جزو دروس اجباری «' + group.title + '»ست.'});
       else reasons.push({text:'برای تکمیل سهمیهٔ «' + group.title + '» (' + prog.done + ' از ' + prog.total + (prog.unitsMode?' واحد':' درس') + ').'});
       if(uc>0) reasons.push({text:'پیش‌نیاز ' + uc + ' درس دیگه است.'});
-      // unpassed coreqs this course needs (it's "available" only because those
-      // coreqs are themselves reachable - meaning it must be taken *together with* them)
       const pendingCo = (course.co||[]).filter(cid=>!passedSet.has(cid));
       if(pendingCo.length){
         const coTitles = pendingCo.map(cid=>titleOf(courses,cid)).join('، ');
@@ -1005,23 +1528,12 @@ function buildSuggestions(groups, courses, passedSet, dismissedSet){
     return unitsOf(b.course)-unitsOf(a.course);
   });
 
-  // A course that needs an unpassed coreq can only appear in the suggestion list
-  // paired with that coreq - otherwise two courses that both merely *tolerate*
-  // being taken alongside the same not-yet-taken course (e.g. two courses that
-  // each list "الکترونیک ۱" as a coreq) would wrongly get suggested side by side,
-  // as if either could be taken on its own right now.
   const suggestedIds = new Set(suggestions.map(s=>s.course.id));
-  const pairedCount = {}; // coreq target id -> how many dependents already claimed it
+  const pairedCount = {};
   const filtered = suggestions.filter(s=>{
     if(s.pendingCo.length===0) return true;
     const allReachable = s.pendingCo.every(cid=>suggestedIds.has(cid));
     if(!allReachable) return false;
-    // claim a slot with each pending coreq target; if any is already taken by a
-    // higher-ranked dependent, this one waits (suggestions are already sorted).
-    // This prevents multiple courses that each merely *tolerate* being taken
-    // alongside the same not-yet-taken coreq course (e.g. several courses that
-    // all list "الکترونیک ۱" as a coreq) from being suggested side by side, as
-    // if each could be taken on its own right now - only one can pair with it.
     for(const cid of s.pendingCo){
       if(pairedCount[cid]) return false;
     }
@@ -1038,18 +1550,24 @@ function renderSuggestions(containerId, groups, courses, passedSet, key, capNote
   container.innerHTML = '';
   const box = document.createElement('div');
   box.className = 'suggest-box';
-  box.innerHTML = `<h2><span class="stamp-dot"></span>پیشنهاد برای ترم بعد</h2>`;
-  const sub = document.createElement('p');
-  sub.className = 'suggest-sub';
-  sub.textContent = capNote || 'بر اساس پیش‌نیازهای گذرونده و سهمیهٔ باقی‌ماندهٔ هر گروه، مرتب‌شده از مهم‌ترین به کم‌اهمیت‌ترین. اگه درسی رو نمی‌تونی برداری، با ✕ ردش کن تا جایگزین بیاد.';
-  box.appendChild(sub);
+  box.innerHTML = `
+    <div class="suggest-head">
+      <div class="suggest-title-wrap">
+        <div class="suggest-icon">⚡</div>
+        <div>
+          <h2 class="suggest-h2">پیشنهاد هوشمند این ترم</h2>
+          <p class="suggest-sub">${escapeHtml(capNote || 'بر اساس چارت، پیش‌نیازها و سهمیه باقی‌مانده مرتب‌شده است.')}</p>
+        </div>
+      </div>
+    </div>
+  `;
 
   const list = document.createElement('div');
   list.className = 'suggest-list';
   if(top.length===0){
     const empty = document.createElement('div');
     empty.className = 'suggest-empty';
-    empty.textContent = 'فعلاً پیشنهادی نیست - یا همه‌چیز رو گذروندی، یا درسی که پیش‌نیازش آماده باشه باقی نمونده.';
+    empty.innerHTML = '<div><b>پیشنهادی برای این بخش نیست</b> — یا دروس کامل شده‌اند یا پیش‌نیاز درسی آماده نیست.</div>';
     list.appendChild(empty);
   }else{
     top.forEach(s=>{
@@ -1058,16 +1576,18 @@ function renderSuggestions(containerId, groups, courses, passedSet, key, capNote
       const tag = document.createElement('span');
       tag.className = 'tag ' + s.kind;
       tag.textContent = s.kind==='mandatory' ? 'اجباری' : 'سهمیه‌ای';
+      
       const body = document.createElement('div');
       body.className = 'body';
       const reasonHtml = s.reasons.map(r=>
-        `<div class="r${r.warn ? ' r-warn' : ''}">- ${escapeHtml(r.text)}</div>`
+        `<div class="r${r.warn ? ' r-warn' : ''}">• ${escapeHtml(r.text)}</div>`
       ).join('');
       const codeHtml = s.course.code ? ` <span class="s-units num">(${escapeHtml(s.course.code)})</span>` : '';
       body.innerHTML = `<div class="t">${escapeHtml(s.course.title)}${codeHtml} <span class="s-units">- ${unitsLabel(s.course)}</span></div>${reasonHtml}`;
+      
       const dismissBtn = document.createElement('button');
       dismissBtn.className = 'dismiss-btn';
-      dismissBtn.title = 'فعلاً نمی‌تونم این رو بردارم - یکی دیگه پیشنهاد بده';
+      dismissBtn.title = 'حذف موقت از پیشنهادات';
       dismissBtn.textContent = '✕';
       dismissBtn.addEventListener('click', ()=>{
         dismissed[key].add(s.course.id);
@@ -1092,7 +1612,7 @@ function renderAll(){
 
   renderSummary('islamic-summary', ISLAMIC_GROUPS, ISLAMIC_COURSES, state.islamic, 'معارف اسلامی');
   renderSuggestions('islamic-suggest', ISLAMIC_GROUPS, ISLAMIC_COURSES, state.islamic, 'islamic',
-    'یادت باشه: سقف انتخاب معارف در هر ترم عادی ۲ واحده (با مجوز مدیر گروه حداکثر ۴ واحد)، پس معمولاً فقط یکی-دو مورد اول این لیست رو همین ترم بردار.');
+    'سقف انتخاب معارف در هر ترم عادی ۲ واحد است (با مجوز مدیر گروه حداکثر ۴ واحد).');
   renderGroups('islamic-groups', ISLAMIC_GROUPS, ISLAMIC_COURSES, state.islamic, 'islamic');
 
   renderSummary('general-summary', GENERAL_GROUPS, GENERAL_COURSES, state.general, 'دروس عمومی');
@@ -1100,7 +1620,7 @@ function renderAll(){
   renderGroups('general-groups', GENERAL_GROUPS, GENERAL_COURSES, state.general, 'general');
 }
 
-/* ============================= TABS & TOOLBAR ============================= */
+/* ============================= TABS & FILTERS ============================= */
 
 document.querySelectorAll('nav.tabs button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -1111,6 +1631,35 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
   });
 });
 
+document.querySelectorAll('.filter-pill').forEach(pill=>{
+  pill.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    activeFilter = pill.dataset.filter;
+    renderAll();
+  });
+});
+
+/* ============================= SETTINGS MODAL ============================= */
+
+const settingsModal = document.getElementById('settingsModal');
+const menuToggleBtn = document.getElementById('menuToggleBtn');
+const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+
+menuToggleBtn.addEventListener('click', ()=>{
+  settingsModal.style.display = 'flex';
+});
+
+closeSettingsBtn.addEventListener('click', ()=>{
+  settingsModal.style.display = 'none';
+});
+
+settingsModal.addEventListener('click', (e)=>{
+  if(e.target === settingsModal) settingsModal.style.display = 'none';
+});
+
+/* ============================= ACTIONS ============================= */
+
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   if(confirm('مطمئنی می‌خوای همهٔ تیک‌ها و نمره‌های هر ۳ بخش پاک بشه؟ این کار قابل بازگشت نیست.')){
     state.elec.clear();
@@ -1118,6 +1667,7 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
     state.general.clear();
     state.grades = {};
     saveState();
+    settingsModal.style.display = 'none';
     renderAll();
   }
 });
@@ -1156,6 +1706,7 @@ document.getElementById('importFile').addEventListener('change', (e)=>{
       state.general = new Set(parsed.general || []);
       state.grades = parsed.grades || {};
       saveState();
+      settingsModal.style.display = 'none';
       renderAll();
       alert('وضعیت با موفقیت بارگذاری شد.');
     }catch(err){
@@ -1176,15 +1727,14 @@ function chartSections(){
   ];
 }
 
-// Builds one row's cells (used by both the live DOM table and the fallback HTML string)
 function escapeHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// Renders a course title, in green if that course has been passed
 function reqTitleHtml(id, sec){
-  const title = escapeHtml(titleOf(sec.courses, id));
-  return sec.passed.has(id) ? '<span class="req-done">' + title + '</span>' : title;
+  const c = byId(sec.courses, id) || byId(ELEC_COURSES, id) || byId(ISLAMIC_COURSES, id) || byId(GENERAL_COURSES, id);
+  const title = escapeHtml(c ? c.title : id);
+  return pidPassed(id, sec.passed) ? '<span class="req-done">' + title + '</span>' : title;
 }
 
 function courseRowData(c, sec){
@@ -1202,7 +1752,6 @@ function courseRowData(c, sec){
   return {isP, gradeTxt, tUnits, pUnits, preTxt, coTxt};
 }
 
-// Builds the printable table body (shared by the print-window HTML)
 function buildChartBodyHTML(){
   let body = '';
   let grandGradedUnits = 0;
@@ -1246,16 +1795,7 @@ function buildChartBodyHTML(){
   return body;
 }
 
-// Builds the "passed units per category" summary shown under the GPA table.
-// Categories are fixed groupings matching the university's official chart layout
-// (not a 1:1 dump of every internal sub-group - e.g. the two "elective specialized"
-// sub-groups are merged into one row, and Islamic/General studies are kept separate
-// even though both live under the "General" tab in the app).
 function buildPassedSummaryHTML(){
-  // Computes passed UNITS and required UNITS for a set of groups. Note: groupProgress()
-  // returns a course *count* (not units) for 'countMin' groups, since their quota is
-  // "pick N courses" - so for those we total the units of passed courses ourselves and
-  // use unitGoal (not group.min) as the required unit total.
   function sumProgress(groups, courses, passedSet, title){
     let done = 0, total = 0;
     groups.forEach(g=>{
@@ -1296,8 +1836,6 @@ function buildPassedSummaryHTML(){
     <table class="summary-table"><tbody>${rows}</tbody></table>`;
 }
 
-// Full standalone HTML document, opened in a new tab and printed (native browser
-// pagination handles page breaks correctly, so table rows never get cut in half).
 function buildChartHTML(){
   const body = buildChartBodyHTML();
   const now = new Date().toLocaleDateString('fa-IR');
@@ -1326,17 +1864,17 @@ function buildChartHTML(){
   .req-done{color:#1e7d34;font-weight:700;}
   .group-caption-row td{background:#d8d8d8;font-weight:700;text-align:right;font-size:13px;}
   table.gpa-table{margin-top:-4px;}
-  .gpa-row .gpa-label{background:#132a2e;color:#fff;font-weight:700;text-align:right;width:80%;}
-  .gpa-row .gpa-value{background:#132a2e;color:#fff;font-weight:700;}
+  .gpa-row .gpa-label{background:#0d9488;color:#fff;font-weight:700;text-align:right;width:80%;}
+  .gpa-row .gpa-value{background:#0d9488;color:#fff;font-weight:700;}
   table.summary-table{font-size:13px;}
   table.summary-table td{text-align:right;}
   .summary-label-cell{width:70%;font-weight:600;}
   .summary-value-cell{direction:rtl;text-align:right;color:#333;}
   .summary-total-row td{background:#eaeaea;font-weight:700;}
-  .print-btn{position:fixed;top:14px;left:14px;padding:9px 16px;background:#132a2e;color:#fff;border:0;
+  .print-btn{position:fixed;top:14px;left:14px;padding:9px 16px;background:#0d9488;color:#fff;border:0;
     border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;}
   .credit-footer{text-align:center;font-size:10.5px;color:#999;margin-top:26px;}
-  .credit-footer a{color:#1a0dab;text-decoration:none;}
+  .credit-footer a{color:#0d9488;text-decoration:none;}
   
   @media print{
     html, body{ -webkit-print-color-adjust:exact; print-color-adjust:exact; color-adjust:exact; }
@@ -1366,12 +1904,12 @@ function openPrintFallback(){
     const triggerPrint = ()=>{ try{ w.focus(); w.print(); }catch(e){} };
     if(w.document.fonts && w.document.fonts.ready){
       w.document.fonts.ready.then(triggerPrint).catch(triggerPrint);
-      setTimeout(triggerPrint, 1200); // safety net if fonts.ready never resolves
+      setTimeout(triggerPrint, 1200);
     }else{
       setTimeout(triggerPrint, 600);
     }
   }else{
-    alert('اجازهٔ باز کردن پنجرهٔ جدید داده نشد؛ لطفاً پاپ‌آپ رو برای این صفحه فعال کن و دوباره امتحان کن.');
+    alert('اجازهٔ باز کردن پنجرهٔ جدید داده نشد؛ لطفاً پاپ‌آپ رو برای این صفحه فعال کن.');
   }
 }
 
@@ -1383,16 +1921,15 @@ document.getElementById('chartBtn').addEventListener('click', downloadChartPDF);
 
 renderAll();
 
-/* ============================= PWA: INSTALL + SERVICE WORKER ============================= */
+/* ============================= PWA & SERVICE WORKER ============================= */
 
 let deferredInstallPrompt = null;
 const installBtn = document.getElementById('installBtn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Chrome/Edge/Android: stop the automatic mini-infobar and save the event to trigger later
   e.preventDefault();
   deferredInstallPrompt = e;
-  installBtn.style.display = 'inline-block';
+  installBtn.style.display = 'flex';
 });
 
 installBtn.addEventListener('click', async () => {
@@ -1400,7 +1937,7 @@ installBtn.addEventListener('click', async () => {
   installBtn.disabled = true;
   deferredInstallPrompt.prompt();
   const { outcome } = await deferredInstallPrompt.userChoice;
-  console.log('نتیجه نصب:', outcome); // 'accepted' یا 'dismissed'
+  console.log('نتیجه نصب:', outcome);
   deferredInstallPrompt = null;
   installBtn.style.display = 'none';
   installBtn.disabled = false;
